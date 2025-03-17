@@ -1,6 +1,7 @@
-import app from "./server.js"
+import app from "./server/server.js"
 import mongodb from "mongodb"
 import dotenv from "dotenv"
+
 
 async function main() {
     dotenv.config();
