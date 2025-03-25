@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 
 async function main() {
     dotenv.config();
-    const client = new mongodb.MongoClient(process.env.MONGODB_URI);
+    const client = new mongodb.MongoClient(process.env.MONGO_URI);
     const port = process.env.PORT || 8000;
     
     try {
