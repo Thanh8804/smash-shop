@@ -6,7 +6,7 @@ import connectDB from "./config/database.js"; // Import file kết nối MongoDB
 import userRoutes from "./routes/user.route.js"; // Đảm bảo đường dẫn đúng
 
 dotenv.config();
-
+const PORT = process.env.PORT || 5001;
 connectDB();
 
 const app = express();
@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
   res.send("Server is running!");
 });
 
-const PORT = process.env.PORT || 5001;
+
 app.listen(PORT, () => console.log(`Server started at http://localhost:${PORT}`));
 
 export default app;
