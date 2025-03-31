@@ -24,6 +24,7 @@ const ProductsList = ({ products, fullWidth, isPaginated }) => {
         {isPaginated && totalPages > 1 && (
             <div className="pagination">
             <button
+                className="pagination-btn"
                 onClick={() => setCurrentPage(currentPage - 1)}
                 disabled={currentPage === 1}
             >
@@ -33,6 +34,7 @@ const ProductsList = ({ products, fullWidth, isPaginated }) => {
                 Trang {currentPage} / {totalPages}
             </span>
             <button
+                className="pagination-btn"
                 onClick={() => setCurrentPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
             >
