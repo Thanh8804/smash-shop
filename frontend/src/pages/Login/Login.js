@@ -3,6 +3,7 @@ import Header from "../../components/Header/Header";
 import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 export default function Login({ setIsAuthenticated }) {
 
@@ -19,6 +20,16 @@ export default function Login({ setIsAuthenticated }) {
     } else {
       alert("Sai email hoặc mật khẩu!");
     }
+  };
+
+  const handleGoogleLoginSuccess = (response) => {
+    console.log('Login Success:', response);
+    setIsAuthenticated(true);
+    navigate("/");
+  };
+
+  const handleGoogleLoginError = () => {
+    console.log('Login Failed');
   };
 
   return (
@@ -44,6 +55,14 @@ export default function Login({ setIsAuthenticated }) {
                 />
                 <button type="submit" className="login-btn">Đăng Nhập</button>
             </form>
+            <GoogleOAuthProvider clientId="345620387766-4f1bndku1jnobkb6316heea4kfe0369b.apps.googleusercontent.com">
+              <div className="App">
+                <GoogleLogin
+                  onSuccess={handleGoogleLoginSuccess}
+                  onError={handleGoogleLoginError}
+                />
+              </div>
+            </GoogleOAuthProvider>
             <p className="register-link">
             Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link>
             </p>
