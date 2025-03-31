@@ -12,6 +12,7 @@ const UserSchema = new mongoose.Schema({
     create_at: { type: Date, default: Date.now },
     update_at: { type: Date }
 });
+
 // Băm mật khẩu trước khi lưu
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
@@ -24,6 +25,8 @@ UserSchema.pre("save", async function (next) {
 UserSchema.methods.comparePassword = async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
 };
+
+
 
 const User = mongoose.model("User", UserSchema);
 export default User;
