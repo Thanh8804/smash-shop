@@ -1,6 +1,6 @@
 import express from "express";
 import { register, login } from "../controllers/Auth.js";
-import { getProfile, getUser, getUsers, updateUsers, createUsers } from "../controllers/user.controller.js";
+import { getProfile, fetchOneUser, fetchAllUsers, updateUsers, createUsers } from "../controllers/user.controller.js";
 import authMiddleware from "../middleware/auth.js";
 
 const userRouter = express.Router();
@@ -13,10 +13,14 @@ userRouter.post("/login", login);
 
 // Lấy thông tin user
 userRouter.get("/profile", getProfile);
+// or
+userRouter.get("/:id", fetchOneUser)
 
+// Lấy danh sách tất cả user
+userRouter.get("/", fetchAllUsers) 
 
-userRouter.get("/", getUsers) 
-userRouter.get("/:id", getUser)
-userRouter.post("/", createUsers )
+// Cập nhật thông tin user
 userRouter.put("/:id", updateUsers)
+
+userRouter.post("/", createUsers )
 export default userRouter;

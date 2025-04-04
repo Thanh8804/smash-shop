@@ -7,6 +7,7 @@ import userRoutes from "./routes/user.route.js"; // Đảm bảo đường dẫn
 import Authrouter from "./routes/auth.route.js";
 import session from 'express-session';
 import passport from "./config/passport.js";
+import productRoutes from "./routes/product.route.js"; // Đảm bảo đường dẫn đúng
 
 dotenv.config();
 const PORT = process.env.PORT || 5001;
@@ -32,6 +33,7 @@ app.use(express.json()); // Quan trọng để đọc dữ liệu JSON từ requ
 app.use(cors());
 // Routes
 app.use("/api/v1/users", userRoutes);
+
 app.use('/api/auth', Authrouter);
 
 // Route đăng nhập Google
@@ -48,6 +50,8 @@ app.get('/api/auth/google/callback',
     }
 );
 
+
+app.use("/api/v1/products", productRoutes);
 
 // Test route
 app.get("/", (req, res) => {
