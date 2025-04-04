@@ -1,22 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faSave, faUser } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+// import dotenv from "dotenv";
 import "./Profile.css";
+// dotenv.config();
 
 function Profile() {
+  const user_id = 1;
   const [profile, setProfile] = useState({
-    name: "Miles Edgeworth",
-    email: "prosecutie@gmail.com",
-    phone: "0123456789",
-    gender: "male",
-    dob: "2000-01-01",
-    address: "123 Đường ABC, TP.HCM",
-    avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq0Ew26loGLlA5Eg0toc7PicPn5JoMu6t6Nw&s",
-  });
+    name: "",
+    email: "",
+    phone: "",
+    gender: "",
+    dob: "",
+    address: "",
+    avatar: ""
+});
+  useEffect(() =>{
+    const fetchProfile = async () => {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/users/${user_id}`);
+        setProfile(response.data.data);
+        console.log('Response Data:', response.data.data);
+        console.log("Status Code:", response.status);
+        console.log("Full Response:", response);
+      } catch (e) {
+        console.log("Error fetching profile:");
+        console.error("Error fetching profile:", e.message);
+      }
+    };
+    fetchProfile(); 
+    // name: "Miles Edgeworth",
+    // email: "prosecutie@gmail.com",
+    // phone: "0123456789",
+    // gender: "male",
+    // dob: "2000-01-01",
+    // address: "123 Đường ABC, TP.HCM",
+    // avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq0Ew26loGLlA5Eg0toc7PicPn5JoMu6t6Nw&s",
+  }, []);
 
   const [isEditing, setIsEditing] = useState(false);
 
   const handleInputChange = (e) => {
+    if (!profile) return;
     const { name, value } = e.target;
     setProfile({ ...profile, [name]: value });
   };

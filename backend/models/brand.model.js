@@ -8,5 +8,5 @@ const BrandSchema = new mongoose.Schema({
 
 // module.exports = mongoose.model('Admin', BrandSchema);
 
-const Brand = mongoose.model('Admin', BrandSchema);
+const Brand = mongoose.model('Brand', BrandSchema);
 export default Brand;
