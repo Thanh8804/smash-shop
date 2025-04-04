@@ -75,7 +75,7 @@ const products = [
     {
       id: 7,
       name: "Balo Victor BR3011",
-      category: "Túi & balo cầu lông",
+      category: "Túi cầu lông",
       brand: "Victor",
       price: 1250000,
       image: "https://votcaulongshop.vn/wp-content/uploads/2024/08/balo-victor-china-open.jpg",
@@ -86,7 +86,7 @@ const products = [
     {
       id: 8,
       name: "Túi cầu lông Yonex Pro 9826",
-      category: "Túi & balo cầu lông",
+      category: "Túi cầu lông",
       brand: "Yonex",
       price: 1890000,
       image: "https://phivansport.vn/uploads/Topic/2022/01/28/alibabon_1643359610548082.jpg",

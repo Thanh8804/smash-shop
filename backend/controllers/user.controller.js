@@ -1,3 +1,4 @@
+import User from "../models/user.model.js";
 export const getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password"); // Không trả về password
@@ -5,13 +6,14 @@ export const getProfile = async (req, res) => {
 
         res.status(200).json(user);
     } catch (error) {
+        console.error("Error in fetching user:", error.mesage)
         res.status(500).json({ message: "Error retrieving user data", error });
     }
 };
 
-export const getUsers = async (req, res) => {
+export const fetchAllUsers = async (req, res) => {
     try {
-        const users = await User.find({});
+        const users = await User.find({}).select("-password");
         res.status(200).json({success: true, data: users})
     } catch (e) {
         console.log("error in fetching users", e.message)
@@ -19,11 +21,11 @@ export const getUsers = async (req, res) => {
     }
 };
 
-export const getUser = async (req, res) => {
+export const fetchOneUser = async (req, res) => {
     const user_id = Number(req.params.id)
 
     try {
-        const user = await User.findOne({user_id: user_id})
+        const user = await User.findOne({user_id: user_id}).select("-password");
 
         if (!user){
             return res.status(404).json({success: false, message: "User not found"})
@@ -59,7 +61,7 @@ export const updateUsers = async (req,res) => {
     const user_id = req.params.id;
     const user = req.body;
     try {
-        
+
         if (!user.name?.trim() || !user.email?.trim() || !user.password?.trim()){
             return res.status(400).json({success: false, message: "Please provide all field"})
         }

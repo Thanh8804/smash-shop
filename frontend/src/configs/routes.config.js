@@ -5,8 +5,8 @@ const routes = {
     user: '/user',
     register: '/register',
     login: '/login',
-    products: '/products'
-
+    products: '/products',
+    product: '/products/1',
 };
 
 export default routes;
