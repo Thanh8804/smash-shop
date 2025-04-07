@@ -38,10 +38,10 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
         </button>
         {productDropdown && (
           <div className="dropdown-menu">
-            {["VỢT CẦU LÔNG", "LƯỚI CẦU LÔNG", "GIÀY CẦU LÔNG", "QUẤN CÁN", "TÚI CẦU LÔNG"].map((item) => (
+            {["Vợt cầu lông", "Lưới cầu lông", "Giày cầu lông", "Quấn cán", "Túi cầu lông"].map((item) => (
               <Link
                 key={item}
-                to={`/products/${item.toLowerCase().replace(/ /g, "-")}`}
+                to={`/products/${item}`}
                 className="dropdown-item"
               >
                 {item}

@@ -1,62 +1,76 @@
 import React from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {faCake } from "@fortawesome/free-solid-svg-icons";
+import { faCake } from "@fortawesome/free-solid-svg-icons";
 import './ProductDetail.css';
-import Header from '../../components/Header/Header'
-import { useNavigate} from 'react-router-dom';
+import Header from '../../components/Header/Header';
+import products from '../../data/products';
 
-const product={
-    id: 1,
-    name: "Yonex Astrox 99 Pro",
-    category: "Vợt cầu lông",
-    brand: "Yonex",
-    price: 4390000,
-    image: "https://cdn.shopvnb.com/uploads/gallery/vot-cau-long-yonex-astrox-99-pro-do-chinh-hang_1735064653.jpg",
-    description: "Vợt chuyên công, smash cực mạnh, kiểm soát tốt.",
-    details:
-    "Yonex Astrox 99 Pro là dòng vợt cao cấp dành cho người chơi tấn công mạnh mẽ. Công nghệ Rotational Generator System giúp cân bằng trọng lượng hoàn hảo, phù hợp cho những cú đập cầu uy lực.",
-}
+const ProductDetail = () => {
+  const { id } = useParams();
+  const product = products.find((p) => p.id === parseInt(id));
+  const navigate = useNavigate();
 
-function ProductDetail({ isAuthenticated, setIsAuthenticated }){
-    return(
+  if (!product) {
+    return <div className="container">Không tìm thấy sản phẩm.</div>;
+  }
+
+  return (
     <>
-        <Header isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
-        <div className="product-detail-container">
-            {/* <div className="breadcrumb">TRANG CHỦ {'>'} VỢT CẦU LÔNG {'>'} {product.name}</div>
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                    <img src={product.image} alt={product.name} className="product-image" />
-                    </div>
-                    <div className="product-info">
-                    <h1 className="product-name">{product.name}</h1>
-                    <div className="product-views">
-                        <FontAwesomeIcon icon={faCake} className="mr-1" /> {product.views} người xem
-                    </div>
-                    <div className="product-price">{product.price} ₫</div>
-                    <p>{product.description}</p>
-                    <div className="quantity-selector">
-                        <label>Số lượng:</label>
-                        <input type="number" min="1" defaultValue="1" className="quantity-input" />
-                    </div>
-                    <button className="add-to-cart-btn">Thêm vào giỏ</button>
-                    <p className="product-stock">Tình trạng: {product.stock} sản phẩm có sẵn</p>
-                    <div className="share-icons">
-                        <span>Chia sẻ:</span>
-                        <FontAwesomeIcon icon={faCake} className="share-icon" />
-                        <FontAwesomeIcon icon={faCake} className="share-icon" />
-                    </div>
-                    </div>
-                </div>
-            <div className="detail-header">THÔNG TIN CHI TIẾT</div>
-                <div className="product-details">
-                    {product.details.map((detail, index) => (
-                    <p key={index} className="product-detail">{index + 1}. {detail}</p>
-                    ))}
-                </div> */}
+      <Header />
+      <div className="container">
+        <div className="breadcrumb">
+          TRANG CHỦ {'>'} {product.category} {'>'} {product.name}
         </div>
-        
+
+        <div className="product">
+          <div className="images">
+            <img src={product.image} alt={product.name} />
+          </div>
+
+          <div className="info">
+            <h1>{product.name}</h1>
+            <div className="price">{product.price.toLocaleString('vi-VN')} ₫</div>
+            <p>Đánh giá: {/* Chưa có dữ liệu */}</p>
+            <p>Số lượng: {/* Chưa có dữ liệu */}</p>
+            <p>Tình trạng: {/* Chưa có dữ liệu */}</p>
+            <button className="btn">Thêm vào giỏ</button>
+            <div className="note">
+              Chia sẻ: 
+            </div>
+          </div>
+        </div>
+
+        <div className="section-title">THÔNG TIN CHI TIẾT</div>
+        <div className="details">
+          <ul>
+            <li>{product.description || ''}</li>
+            <li>{product.details || ''}</li>
+          </ul>
+          <ul>
+            <li>Thương hiệu: {product.brand || ''}</li>
+            <li>Danh mục: {product.category || ''}</li>
+            <li>Mẫu mã: {/* Chưa có dữ liệu */}</li>
+            <li>Xuất xứ: {/* Chưa có dữ liệu */}</li>
+          </ul>
+        </div>
+
+        <div className="section-title">Sản phẩm tương tự</div>
+        <div className="similar-products">
+          {products
+            .filter((p) => p.category === product.category && p.id !== product.id)
+            .slice(0, 4)
+            .map((prod, i) => (
+              <div key={i} className="product-item" onClick={() => navigate(`/product/${prod.id}`)}>
+                <img src={prod.image} alt={prod.name} />
+                <div>{prod.name}</div>
+                <div className="price">{prod.price.toLocaleString('vi-VN')} ₫</div>
+              </div>
+            ))}
+        </div>
+      </div>
     </>
-    );
-}
+  );
+};
 
 export default ProductDetail;
