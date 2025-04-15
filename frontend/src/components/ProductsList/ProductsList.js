@@ -17,7 +17,7 @@ const ProductsList = ({ products, fullWidth, isPaginated }) => {
     <div className="products-list-container">
         <div className={`products-list ${fullWidth ? "full-width" : "narrow-width"}`}>
         {displayedProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
         ))}
         </div>
         { /* Hiển thị phân trang nếu cần */}

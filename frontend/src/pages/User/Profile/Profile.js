@@ -24,6 +24,7 @@ function Profile() {
   }, [dispatch]);
   
   const handleInputChange = (e) => {
+    if (!profile) return;
     const { name, value } = e.target;
     dispatch(updateProfileField({ name, value }));
   };

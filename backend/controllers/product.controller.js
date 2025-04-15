@@ -1,32 +1,17 @@
 import Product from '../models/product.model.js';
 import Category from '../models/category.model.js';
 import Brand from '../models/brand.model.js';
-import Type from '../models/type.model.js';
-
-
-export const fetchOneProduct = async (req, res) => {
+import ProductImage from '../models/productImage.model.js';
+import Type from '../models/type.model.js'
+export const fetchProductById = async (req, res) => {
     const productId = req.params.id;
     try {
         const product = await Product
                                     .findOne({ prod_id: productId })
-                                    .populate({
-                                        path: 'category_id',
-                                        model: Category,
-                                        localField: 'category_id',
-                                        foreignField: 'category_id',
-                                     })
-                                    .populate({
-                                        path: 'brand_id',
-                                        model: Brand,
-                                        localField: 'brand_id',
-                                        foreignField: 'brand_id',
-                                    })
-                                    .populate({
-                                        path: 'type_id',
-                                        model: Type,
-                                        localField: 'type_id',
-                                        foreignField: 'type_id',
-                                    })
+                                    .populate('category_id')
+                                    .populate('brand_id')
+                                    .populate('type_id')
+                                    .populate('images')
         if(!product) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
@@ -38,28 +23,37 @@ export const fetchOneProduct = async (req, res) => {
 }
 export const fetchAllProducts = async (req, res) => {
     try {
-        const products = await Product
-                                    .find({})
+        const products = await Product.find({})
+                                    .populate('category_id')
+                                    .populate('brand_id')
+                                    .populate('type_id')
                                     .populate({
-                                        path: 'category_id',
-                                        model: Category,
-                                        localField: 'category_id',
-                                        foreignField: 'category_id',
-                                     })
-                                    .populate({
-                                        path: 'brand_id',
-                                        model: Brand,
-                                        localField: 'brand_id',
-                                        foreignField: 'brand_id',
-                                    })
-                                    .populate({
-                                        path: 'type_id',
-                                        model: Type,
-                                        localField: 'type_id',
-                                        foreignField: 'type_id',
-                                    })
+                                        path:'images',
+                                        select: 'image is_primary_image -prod_id',
+                                        match: {is_primary_image: true}
+                                    });
+        if(!products) {
+            return res.status(404).json({ success: false, message: "Products not found" });
+        }
         res.status(200).json({success: true, data: products});
     } catch(e) {
+        console.error("Error in fetching products:", e.message);
+        res.status(500).json({success: false, message: "Server Error"});
+    }
+}
+
+export const fetchProductsDetail = async (req, res) => {
+    try {
+        const products = await Product.find({})
+                                    .populate('category_id')
+                                    .populate('brand_id')
+                                    .populate('type_id')
+                                    .populate('images');
+        if (!products) {
+            return res.status(404).json({ success: false, message: "Products not found" });
+        }
+        res.status(200).json({success: true, data: products});
+    } catch (e) {
         console.error("Error in fetching products:", e.message);
         res.status(500).json({success: false, message: "Server Error"});
     }

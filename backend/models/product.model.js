@@ -12,8 +12,16 @@ const ProductSchema = new mongoose.Schema({
     discount: { type: Number },
     create_at: { type: Date, default: Date.now },
     update_at: { type: Date }
-});
-
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  });
+// tạo virtual field
+ProductSchema.virtual('images', {
+    ref: 'ProductImage',
+    localField: '_id',
+    foreignField: 'prod_id',
+  });
 const Product = mongoose.model('Product', ProductSchema);
 
 export default Product;
