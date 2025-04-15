@@ -5,57 +5,40 @@ import axios from "axios";
 // import dotenv from "dotenv";
 import "./Profile.css";
 // dotenv.config();
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProfile, updateProfileField, updateAvatar, setIsEditing } from '../../../features/user/userSlice';
+
+
+
 
 function Profile() {
-  const user_id = 1;
-  const [profile, setProfile] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    dob: "",
-    address: "",
-    avatar: ""
-});
-  useEffect(() =>{
-    const fetchProfile = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/users/${user_id}`);
-        setProfile(response.data.data);
-        console.log('Response Data:', response.data.data);
-        console.log("Status Code:", response.status);
-        console.log("Full Response:", response);
-      } catch (e) {
-        console.log("Error fetching profile:");
-        console.error("Error fetching profile:", e.message);
-      }
-    };
-    fetchProfile(); 
-    // name: "Miles Edgeworth",
-    // email: "prosecutie@gmail.com",
-    // phone: "0123456789",
-    // gender: "male",
-    // dob: "2000-01-01",
-    // address: "123 Đường ABC, TP.HCM",
-    // avatar: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq0Ew26loGLlA5Eg0toc7PicPn5JoMu6t6Nw&s",
-  }, []);
+  const dispatch = useDispatch();
+  const profile = useSelector(state => state.user.profile);
+  const isEditing = useSelector(state => state.user.isEditing);
+  const status = useSelector(state => state.user.status);
+  const error = useSelector(state => state.user.error);
 
-  const [isEditing, setIsEditing] = useState(false);
-
+  useEffect(() => {
+    const user_id = 1;
+    dispatch(fetchProfile(user_id));
+  }, [dispatch]);
+  
   const handleInputChange = (e) => {
     if (!profile) return;
     const { name, value } = e.target;
-    setProfile({ ...profile, [name]: value });
+    dispatch(updateProfileField({ name, value }));
   };
-
+  
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setProfile({ ...profile, avatar: imageUrl });
+      dispatch(updateAvatar(imageUrl));
     }
   };
-
+  const toggleEdit = () => {
+    dispatch(setIsEditing(!isEditing));
+  };
   return (
     <div className="profile-container">
       {/* Phần thông tin */}

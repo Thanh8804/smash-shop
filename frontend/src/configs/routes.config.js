@@ -6,7 +6,7 @@ const routes = {
     register: '/register',
     login: '/login',
     products: '/products',
-    product: '/products/1',
+    product: '/product/:id',
 };
 
 export default routes;
