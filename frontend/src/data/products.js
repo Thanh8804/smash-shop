@@ -110,7 +110,7 @@ const products = [
     {
       id: 10,
       name: "Quấn cán vợt Lining GP1000",
-      category: "Phụ kiện cầu lông",
+      category: "Quấn cán",
       brand: "Lining",
       price: 150000,
       image: "https://product.hstatic.net/1000362402/product/86ad06cbf98eb55240500946d051c9d6_337b0eb27d7d40299beb8747b0a81f9d_69e8fa4ee1ce4116941bfbc67ff930a6.jpg",

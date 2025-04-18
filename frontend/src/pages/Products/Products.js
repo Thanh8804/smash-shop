@@ -71,15 +71,27 @@
     const handleCategoryClick = (selectedCategory) => {
       if (category === "Tất cả" ) {
         if (window.location.pathname !== routes.products) {
-          navigate(routes.products); // Điều hướng đến trang gốc
+          navigate(routes.products); 
       } else {
           navigate(routes.products, { replace: true });
-          window.location.reload(); // Cách đơn giản để làm mới trang
+          window.location.reload(); 
       }
           
       } else {
         navigate(`/products/${selectedCategory}`);
       }
+    };
+    //// SORT - HEADER
+    const sortMap = {
+      'Phổ biến': 'popular',
+      'Mới nhất': 'newest',
+      'Bán chạy': 'best_selling',
+      'Giá tăng dần': 'price_asc',
+      'Giá giảm dần': 'price_desc'
+    };
+    const handleSortChange = (value) => {
+      setSortOption(value);
+      // dispatch(fetchAllProducts({ sort: sortMap[value] }));
     };
     
     return (
@@ -94,11 +106,11 @@
                 <div className="sort-options">
                   <label>Sắp xếp theo:</label>
                   {['Phổ biến', 'Mới nhất', 'Bán chạy'].map((option) => (
-                    <button key={option} className={sortOption === option ? 'active' : ''} onClick={() => setSortOption(option)}>
+                    <button key={option} className={sortOption === option ? 'active' : ''} onClick={() => handleSortChange(option)}>
                       {option}
                     </button>
                   ))}
-                  <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                  <select value={sortOption} onChange={(e) => handleSortChange(e.target.value)}>
                     <option value="Giá tăng dần">Giá tăng dần</option>
                     <option value="Giá giảm dần">Giá giảm dần</option>
                   </select>

@@ -1,4 +1,4 @@
-// src/features/user/userSlice.js
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 

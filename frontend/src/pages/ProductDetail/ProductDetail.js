@@ -33,16 +33,22 @@ const ProductDetail = () => {
             <h1>{product.prod_name}</h1>
             <div className="price">{product.price.toLocaleString('vi-VN')} ₫</div>
             <p>Đánh giá: {/* Chưa có dữ liệu */}</p>
-            <p>Số lượng: {product.stock}</p>
-            <p>Tình trạng: {/* Chưa có dữ liệu */}</p>
-            <button className="btn">Thêm vào giỏ</button>
-            <div className="note">
-              Chia sẻ: 
+
+            <div className="quantity">
+              <label>Số lượng: </label>
+              <button className="qty-btn">-</button>
+              <input type="number" min="1" value={1} readOnly />
+              <button className="qty-btn">+</button>
+              <button className="btn">Thêm vào giỏ</button>
             </div>
+            <p>Số lượng trong kho: {product.stock}</p>
+            <p>Tình trạng: {/* Chưa có dữ liệu */}</p>
+            
+            <div className="note">Chia sẻ:</div>
           </div>
         </div>
 
-        <div className="section-title">THÔNG TIN CHI TIẾT</div>
+        <div className="section-heading">THÔNG TIN CHI TIẾT</div>
         <div className="details">
           <ul>
             <li>{product.description || ''}</li>
@@ -56,7 +62,7 @@ const ProductDetail = () => {
           </ul>
         </div>
 
-        <div className="section-title">Sản phẩm tương tự</div>
+        <div className="home-section-title">Sản phẩm tương tự</div>
         <div className="similar-products">
           {products
             .filter((p) => p.category_id.category_name === product.category_id.category_name && p._id !== product._id)

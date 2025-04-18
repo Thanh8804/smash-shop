@@ -7,6 +7,9 @@ const routes = {
     login: '/login',
     products: '/products',
     product: '/product/:id',
+    cart: '/cart',
+    order: '/order',
+
 };
 
 export default routes;
