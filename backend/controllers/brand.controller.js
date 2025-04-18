@@ -1,4 +1,4 @@
-import Brand from "../model/brand.model.js"
+import Brand from "../models/brand.model.js"
 
 // export const getBrands = async(req, res) =>{
 //     try {
@@ -23,4 +23,17 @@ export const createBrands = async(req, res) => {
         res.status(500).json({success: false, message: "Server error"})
     }
 };
+
+export const fetchAllBrand = async(req, res) => {
+    try {
+        const brand = await Brand.find()
+        if (!brand){
+            res.status(404).json({success: false, message: 'Not find brand'})
+        } 
+        res.status(200).json({success: true, data: brand })
+    } catch (e) {
+        console.error(e.message)
+        return res.status(500).json({success: false, message: 'Server Error'})
+    }
+}
 

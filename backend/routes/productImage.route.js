@@ -1,6 +1,9 @@
 import express from "express";
-import { fetchImagesByProductId } from "../controllers/productImage.controller.js";
+import { uploadImage } from "../controllers/productImage.controller.js";
+import parser from '../utils/multer.js'
 const productImageRouter = express.Router();
 
-productImageRouter.get("/:id", fetchImagesByProductId);
+
+productImageRouter.post('/upload', parser.single('image'), uploadImage)
+// productImageRouter.get("/:id", fetchImagesByProductId);
 export default productImageRouter;
