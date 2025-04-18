@@ -82,7 +82,7 @@ function Home({ isAuthenticated, setIsAuthenticated }){
                 isPaginated={false}
             />
             </div>
-        </div>
+        </div> 
         
     </>
     );

@@ -7,6 +7,8 @@ import Profile from '../pages/User/Profile/Profile';
 import OrdersHistory from '../pages/User/OrderHistory/OrdersHistory';
 import Products from '../pages/Products/Products';
 import ProductDetail from '../pages/ProductDetail/ProductDetail';
+import Cart from '../pages/Cart/Cart';
+import Order from '../pages/Order/Order';
 import { Navigate } from "react-router-dom";
 
 const pages = [
@@ -15,6 +17,9 @@ const pages = [
     { path: routes.register, Component: Register },
     { path: routes.products, Component: Products },
     { path: routes.product, Component: ProductDetail },
+    { path: routes.cart, Component: Cart },
+    { path: routes.order, Component: Order },
+
     { path: `${routes.products}/:category`, Component: Products },
 
     { 
