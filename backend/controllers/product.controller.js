@@ -40,7 +40,7 @@ export const fetchAllProducts = async (req, res) => {
     const categoryFilter = (category) ? {'category_id':category } : {};
 
     // Brand Filter
-    const brand = (req.query.category) || ''
+    const brand = (req.query.brand) || ''
     const brandFilter = (brand) ? {brand_id: brand} : {}
     // Combine filters
     const query = { ...priceFilter, ...categoryFilter, ...brandFilter};

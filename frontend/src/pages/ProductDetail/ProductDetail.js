@@ -26,7 +26,7 @@ const ProductDetail = () => {
 
         <div className="product">
           <div className="images">
-            <img src={`${process.env.REACT_APP_API_URL}/image/${product.images.find(img => img.is_primary_image)?.image}`} alt={product.prod_name} />
+            <img src={`${product.images.find(img => img.is_primary_image)?.image}`} alt={product.prod_name} />
           </div>
 
           <div className="info">
@@ -69,7 +69,7 @@ const ProductDetail = () => {
             .slice(0, 4)
             .map((prod, i) => (
               <div key={i} className="product-item" onClick={() => navigate(`/product/${prod.id}`)}>
-                <img src={`${process.env.REACT_APP_API_URL}/image/${prod.images.find(img => img.is_primary_image)?.image}`} alt={prod.name} />
+                <img src={`${prod.images.find(img => img.is_primary_image)?.image}`} alt={prod.name} />
                 <div>{prod.prod_name}</div>
                 <div className="price">{prod.price.toLocaleString('vi-VN')} ₫</div>
               </div>
