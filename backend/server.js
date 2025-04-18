@@ -3,14 +3,15 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/database.js"; // Import file kết nối MongoDB
-import userRoutes from "./routes/user.route.js"; // Đảm bảo đường dẫn đúng
+import userRoutes from "./routes/user.route.js"; 
 import Authrouter from "./routes/auth.route.js";
 import session from 'express-session';
 import passport from "./config/passport.js";
-import productRoutes from "./routes/product.route.js"; // Đảm bảo đường dẫn đúng
-import productImageRoutes from "./routes/productImage.route.js"; // Đảm bảo đường dẫn đúng
-import path from "path";
-import { fileURLToPath } from 'url'
+import productRoutes from "./routes/product.route.js"; 
+import productImageRoutes from "./routes/productImage.route.js"; 
+import categoryRoutes from "./routes/category.route.js"
+import orderRoutes from "./routes/order.route.js";
+import brandRoutes from "./routes/brand.route.js"
 dotenv.config();
 const PORT = process.env.PORT || 5001;
 connectDB();
@@ -33,10 +34,14 @@ app.use(passport.session());
 // Middleware
 app.use(express.json()); // Quan trọng để đọc dữ liệu JSON từ request
 app.use(cors());
+
 // Routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/productImages",productImageRoutes);
+app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/order",orderRoutes)
+app.use("api/v1/brand", brandRoutes);
 app.use('/api/auth', Authrouter);
 
 // Route đăng nhập Google
@@ -60,10 +65,6 @@ app.get('/api/auth/google/callback',
 app.get("/", (req, res) => {
   res.send("Server is running!");
 });
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use('/image', express.static(path.join(__dirname, '/public/image')));
 
 // Cấu hình các Routes còn lại 
 app.use('*',(req, res) => {

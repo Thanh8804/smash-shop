@@ -9,8 +9,17 @@ const OrderSchema = new mongoose.Schema({
     datePaid: { type: Date },
     pay_method: { type: String },
     location: { type: String }
+}, 
+{
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
-
+// tạo virtual field
+OrderSchema.virtual('order_details', {
+    ref: 'OrderDetail',
+    localField: '_id',
+    foreignField: 'order_id',
+  });
 const Order = mongoose.model('Order', OrderSchema);
 
 export default Order;

@@ -13,3 +13,13 @@ export const fetchImagesByProductId = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server Error" });
     }
 }
+
+// Upload hình ảnh sản phẩm
+export const uploadImage = async (req, res) => {
+    try {
+        const imageUrl = req.file.path; // đường dẫn ảnh trên Cloudinary
+        res.json({ success: true, data: {imageUrl: imageUrl}  });
+      } catch (error) {
+        res.status(500).json({ error: 'Upload failed' });
+      }
+}
