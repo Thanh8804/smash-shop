@@ -41,7 +41,7 @@ app.use("/api/v1/products", productRoutes);
 app.use("/api/v1/productImages",productImageRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/order",orderRoutes)
-app.use("api/v1/brand", brandRoutes);
+app.use("/api/v1/brand", brandRoutes);
 app.use('/api/auth', Authrouter);
 
 // Route đăng nhập Google
