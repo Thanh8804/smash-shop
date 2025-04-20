@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import bcrypt from "bcrypt"; // Nếu dùng bcrypt
-// import bcrypt from "bcryptjs"; // Nếu dùng bcryptjs
+import bcrypt from "bcrypt";
+import crypto from 'crypto';
 
 const UserSchema = new mongoose.Schema({
     user_id: { type: Number, unique: true },
@@ -12,6 +12,8 @@ const UserSchema = new mongoose.Schema({
     create_at: { type: Date, default: Date.now },
     update_at: { type: Date },
     refreshToken: { type: String },
+    passwordResetToken: { type: String },
+    passwordResetExpires: { type: Date },
 });
 
 // Băm mật khẩu trước khi lưu
@@ -23,9 +25,17 @@ UserSchema.pre("save", async function (next) {
 });
 
 // Phương thức check lại pass
-UserSchema.methods.comparePassword = async function (candidatePassword) {
+UserSchema.methods ={
+    comparePassword: async function (candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
-};
+    },
+    createPasswordResetToken: function () {
+        const resetToken = crypto.randomBytes(32).toString("hex");
+        this.passwordResetToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+        this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 phút
+        return resetToken;
+    },
+}
 
 
 

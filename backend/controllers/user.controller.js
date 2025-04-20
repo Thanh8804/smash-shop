@@ -3,6 +3,9 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import { generateToken, generateRefreshToken } from "../middleware/jwt.js";
 import asyncHandler from 'express-async-handler';
+import sendmail from "../utils/sendmail.js";
+import { createHash } from 'crypto';
+
 
 // Đăng ký
 export const register = async (req, res) => {
@@ -104,6 +107,44 @@ export const logout = asyncHandler( async (req, res) => {
         res.clearCookie("refreshtoken", {httpOnly: true, secure: true});
         res.status(200).json({success: true, message: "Logout successfully"})
     })
+})
+
+//quên mật khẩu
+export const forgotPassword = asyncHandler( async (req, res) => {
+    const { email } = req.body;
+    console.log("REQ BODY:", req.body);
+
+    if (!email) return res.status(400).json({message: "Please provide your email"})
+    
+    const user = await User.findOne({email: email})
+    if (!user) return res.status(400).json({message: "User not found"})
+
+    const resetToken = user.createPasswordResetToken()
+    await user.save()
+
+    const html = `Xin vui lòng nhập vào link sau để lấy lại mật khẩu: <a href=${process.env.URL_SERVER}/resetpassword/${resetToken}>Reset Password</a>`
+    const rs = await sendmail(email, html)
+    return res.status(200).json({success: true, message: `Reset password link has been sent to ${email}`})
+})
+
+//Đổi mật khẩu
+export const resetPassword = asyncHandler(async (req, res) => {
+    const { password } = req.body;
+    const { token } = req.body;
+    console.log("REQ BODY:", req.body);
+    if (!password) return res.status(400).json({message: "Please provide your password"})
+    
+    const hashedToken = createHash("sha256").update(token).digest("hex")
+    const user = await User.findOne({passwordResetToken: hashedToken, passwordResetExpires: {$lt: Date.now()}})
+
+    if (!user) return res.status(400).json({message: "Token is invalid or has expired"})
+
+    user.password = password
+    user.passwordResetToken = undefined
+    user.passwordResetExpires = undefined
+
+    await user.save()
+    return res.status(200).json({success: true, message: "Password has been changed successfully"})
 })
 
 //Thông tin tài khoản

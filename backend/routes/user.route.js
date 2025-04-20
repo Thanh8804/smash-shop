@@ -1,5 +1,5 @@
 import express from "express";
-import { getProfile, RefreshToken, fetchOneUser, fetchAllUsers, updateUsers, createUsers, register, login, logout } from "../controllers/user.controller.js";
+import { getProfile, RefreshToken, fetchOneUser, fetchAllUsers, updateUsers, createUsers, register, login, logout, forgotPassword, resetPassword } from "../controllers/user.controller.js";
 import authMiddleware from "../middleware/auth.js";
 
 const userRouter = express.Router();
@@ -16,6 +16,11 @@ userRouter.post("/refreshtoken",RefreshToken);
 // Đăng xuất
 userRouter.post("/logout",logout);
 
+//Quên mật khẩu
+userRouter.post("/forgotpassword",forgotPassword);
+
+//đổi mật khẩu
+userRouter.put("/resetpassword", resetPassword);
 // Lấy thông tin user
 userRouter.get("/profile",authMiddleware, getProfile);
 // or
