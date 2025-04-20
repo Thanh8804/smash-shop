@@ -12,12 +12,14 @@ import productImageRoutes from "./routes/productImage.route.js";
 import categoryRoutes from "./routes/category.route.js"
 import orderRoutes from "./routes/order.route.js";
 import brandRoutes from "./routes/brand.route.js"
+import cookieParser from 'cookie-parser';
 dotenv.config();
 const PORT = process.env.PORT || 5001;
 connectDB();
 
 const app = express();
 // Khởi tạo Passport
+app.use(cookieParser());
 
 app.use(
     session({
