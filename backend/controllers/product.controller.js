@@ -102,3 +102,41 @@ export const fetchAllProducts = async (req, res) => {
         res.status(500).json({success: false, message: "Server Error"});
     }
 }
+
+export const createProduct = async(req,res) =>{
+    const {prod_name, description, price, stock, discount, category_id, brand_id, type_id} = req.body // tên biến phải giống với tên các key trong object được gửi từ frontend 
+
+    if (!prod_name || !price || !description || !stock || !category_id || !brand_id || !type_id) {
+        return res.status(400).json({success: false, message: "Please fill full required information"})
+    }
+
+    const quantity_sold = 0
+    const newProduct = new Product({
+        prod_name: prod_name,
+        price: price,
+        description: description,
+        quantity_sold: quantity_sold,
+        stock: stock,
+        discount: discount || 0,
+        category_id: category_id,
+        brand_id: brand_id,
+        type_id: type_id
+    })
+    
+    try {
+        const product = await newProduct.save()
+        return res.status(200).json({success: true, data: newProduct})
+    } catch(e) {
+
+    }
+    // const newProduct = {
+    //     prod_name: prod_name,
+    //     price: price,
+    //     description: description,
+    //     quantity_sold: 0,
+    //     stock: stock,
+    //     discount: discount || 0 
+    //     category
+    // }
+    
+}
