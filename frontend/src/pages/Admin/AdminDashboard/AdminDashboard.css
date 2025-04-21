@@ -1,0 +1,86 @@
+/* AdminDashboardLayout.css */
+
+.ad-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .ad-header {
+    background-color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .ad-body {
+    display: flex;
+    flex: 1;
+  }
+  
+  .ad-sidebar {
+    width: 220px;
+    background-color: #f9f9f9;
+    padding: 20px 0;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .ad-logo {
+    font-weight: bold;
+    font-size:24px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .ad-nav {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ad-nav-item,
+  .ad-subitem {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background 0.2s;
+    gap: 10px;
+  }
+  
+  .ad-nav-item:hover,
+  .ad-subitem:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .ad-nav-item.active,
+  .ad-subitem.active {
+    background-color: #EAC427;
+    color: white;
+  }
+  
+  .ad-submenu {
+    margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ad-nav-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ad-nav-collapsible {
+    cursor: pointer;
+  }
+  
+  .ad-main {
+    flex: 1;
+    padding: 0px 10px;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+  }
+  
