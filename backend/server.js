@@ -12,12 +12,15 @@ import productImageRoutes from "./routes/productImage.route.js";
 import categoryRoutes from "./routes/category.route.js"
 import orderRoutes from "./routes/order.route.js";
 import brandRoutes from "./routes/brand.route.js"
+import cookieParser from 'cookie-parser';
 dotenv.config();
+
 const PORT = process.env.PORT || 5001;
 connectDB();
 
 const app = express();
-// Khởi tạo Passport
+app.use(express.json()); // Quan trọng để đọc dữ liệu JSON từ request
+app.use(cookieParser());
 
 app.use(
     session({
@@ -32,7 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Middleware
-app.use(express.json()); // Quan trọng để đọc dữ liệu JSON từ request
 app.use(cors());
 
 // Routes
@@ -58,13 +60,6 @@ app.get('/api/auth/google/callback',
     }
 );
 
-
-
-
-// Test route
-app.get("/", (req, res) => {
-  res.send("Server is running!");
-});
 
 // Cấu hình các Routes còn lại 
 app.use('*',(req, res) => {
