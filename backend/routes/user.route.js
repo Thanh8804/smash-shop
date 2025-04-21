@@ -26,6 +26,7 @@ userRouter.get("/profile",authMiddleware, getProfile);
 
 
 userRouter.use(adminMiddleware);
+
 // Lấy danh sách tất cả user
 userRouter.get("/", fetchAllUsers);
 // Cập nhật thông tin user

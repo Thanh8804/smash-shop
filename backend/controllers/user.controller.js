@@ -232,7 +232,7 @@ export const updateUsers = async (req,res) => {
 export const deleteUsers = async (req, res) => {
     const user_id = req.params.id;
     try {
-        const deleteUser = await User.findOneAndDelete({user_id: user_id})
+        const deleteUser = await User.findOneAndDelete({_id: user_id})
         if (!deleteUser) {
             return res.status(400).json({ success: false, message: "Invalid User ID" });
         }
