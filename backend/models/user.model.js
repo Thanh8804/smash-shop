@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import bcrypt from "bcrypt";
 import crypto from 'crypto';
+// import { removeListener } from 'process';
 
 const UserSchema = new mongoose.Schema({
     user_id: { type: Number, unique: true },
@@ -9,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     password: { type: String, required: true },
     phone_number: { type: String },
     status: { type: String },
+    role: { type: String, enum: ["admin", "user"], default: "user" },
     create_at: { type: Date, default: Date.now },
     update_at: { type: Date },
     refreshToken: { type: String },

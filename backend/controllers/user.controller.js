@@ -58,10 +58,10 @@ export const login = async (req, res) => {
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
         // Tạo token JWT để lưu trong cookie
-        const token = generateToken({ _id: user._id, email: user.email });
+        const token = generateToken({ _id: user._id, email: user.email, role: user.role });
 
         // Lưu refresh token vào cơ sở dữ liệu
-        const refreshToken =generateRefreshToken({ _id: user._id, email: user.email });
+        const refreshToken =generateRefreshToken({ _id: user._id, email: user.email, role: user.role });
 
         // Lưu refresh token vào database
         await User.findByIdAndUpdate(user._id, {refreshToken} ,{new:true})
@@ -71,7 +71,7 @@ export const login = async (req, res) => {
         res.status(200).json({ 
             sussces: true,
             token,
-            user: { id: user.user_id, name: user.name, email: user.email } 
+            user: { id: user.user_id, name: user.name, email: user.email, role: user.role }, 
         });
     } catch (error) {
         res.status(500).json({ message: "Error logging in", error });
@@ -135,7 +135,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
     if (!password) return res.status(400).json({message: "Please provide your password"})
     
     const hashedToken = createHash("sha256").update(token).digest("hex")
-    const user = await User.findOne({passwordResetToken: hashedToken, passwordResetExpires: {$lt: Date.now()}})
+    const user = await User.findOne({passwordResetToken: hashedToken, passwordResetExpires: {$gt: Date.now()}})
 
     if (!user) return res.status(400).json({message: "Token is invalid or has expired"})
 
@@ -160,9 +160,10 @@ export const getProfile = async (req, res) => {
     }
 };
 
+//Lấy thông tin tất cả tài khoản
 export const fetchAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}).select("-password");
+        const users = await User.find({}).select("-password -refreshToken -passwordResetToken -passwordResetExpires").sort({user_id: 1});
         res.status(200).json({success: true, data: users})
     } catch (e) {
         console.log("error in fetching users", e.message)
@@ -170,11 +171,12 @@ export const fetchAllUsers = async (req, res) => {
     }
 };
 
+//Lấy thông tin tài khoản theo id
 export const fetchOneUser = async (req, res) => {
     const user_id = Number(req.params.id)
 
     try {
-        const user = await User.findOne({user_id: user_id}).select("-password");
+        const user = await User.findOne({user_id: user_id}).select("-password -refreshToken -passwordResetToken -passwordResetExpires");
 
         if (!user){
             return res.status(404).json({success: false, message: "User not found"})
@@ -185,9 +187,9 @@ export const fetchOneUser = async (req, res) => {
         console.error("Error in fetching user:", e.mesage)
         res.status(500).json({success: false, message: "Server Error"})
     }
-
 }
 
+//Tạo tài khoản mới
 export const createUsers = async (req, res) => {
     const user = req.body;
 
@@ -206,20 +208,14 @@ export const createUsers = async (req, res) => {
     }
 };
 
+//Update tài khoản
 export const updateUsers = async (req,res) => {
     const user_id = req.params.id;
     const user = req.body;
+    console.log("User ID:", user_id)
+    console.log("User data:", user)
     try {
-
-        if (!user.name?.trim() || !user.email?.trim() || !user.password?.trim()){
-            return res.status(400).json({success: false, message: "Please provide all field"})
-        }
-
-        if (user.user_id && user.user_id != String(user_id)){
-            return res.status(400).json({success: false, message: "Cannot update user_id"})
-        }
-
-        const updateUser = await User.findOneAndUpdate({user_id: user_id}, user, {new: true})
+        const updateUser = await User.findOneAndUpdate({_id: user_id}, user, {new: true})
 
         if (!updateUser){
             return res.status(400).json({success: false, mesage: "Invalid User ID"})
@@ -230,5 +226,20 @@ export const updateUsers = async (req,res) => {
         console.error("Error in Update user:", e.message)
         res.status(500).json({success: false, message: "Server Error"})
     }
+}
 
-};
+//Xóa tài khoản
+export const deleteUsers = async (req, res) => {
+    const user_id = req.params.id;
+    try {
+        const deleteUser = await User.findOneAndDelete({user_id: user_id})
+        if (!deleteUser) {
+            return res.status(400).json({ success: false, message: "Invalid User ID" });
+        }
+        res.status(200).json({ success: true, message: "User deleted successfully" });
+    }
+    catch (e) {
+        console.error("Error in Delete user:", e.message);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+}
