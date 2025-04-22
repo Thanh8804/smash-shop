@@ -13,6 +13,9 @@ import categoryRoutes from "./routes/category.route.js"
 import orderRoutes from "./routes/order.route.js";
 import brandRoutes from "./routes/brand.route.js"
 import cookieParser from 'cookie-parser';
+import cartRouter from "./routes/cart.route.js";
+
+
 dotenv.config();
 
 const PORT = process.env.PORT || 5001;
@@ -45,6 +48,7 @@ app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/order",orderRoutes)
 app.use("/api/v1/brand", brandRoutes);
 app.use('/api/auth', Authrouter);
+app.use('/api/v1/cart', cartRouter);
 
 // Route đăng nhập Google
 app.get('/api/auth/google', 
