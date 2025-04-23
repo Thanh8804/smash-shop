@@ -4,6 +4,8 @@ import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { apiLogin } from "../../apis/user";
+import Swal from "sweetalert2";
 
 export default function Login({ setIsAuthenticated }) {
 
@@ -11,14 +13,24 @@ export default function Login({ setIsAuthenticated }) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
-    if (email === "" && password === "") {
+    try {
+      //Thông báo thành công
+      await apiLogin({email,password});
+      Swal.fire('Đăng nhập thành công!', '', 'success');
       setIsAuthenticated(true);
       localStorage.setItem("isAuthenticated", "true"); // Lưu trạng thái đăng nhập
       navigate("/");
-    } else {
-      alert("Sai email hoặc mật khẩu!");
+    } catch (err) {
+      //Lỗi từ API
+      console.log('Lỗi từ API:', err.response?.data || err.message);
+      //Hiện thông báo dễ hiểu cho người dùng
+      Swal.fire({
+        title: 'Lỗi đăng nhập',
+        text: err.response?.data?.message || 'Sai email hoặc mật khẩu!',
+        icon: 'error',
+      });
     }
   };
 

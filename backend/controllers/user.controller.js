@@ -14,13 +14,19 @@ export const register = async (req, res) => {
 
         // Kiểm tra thiếu dữ liệu
         if (!name || !email || !password) {
-            return res.status(400).json({ message: "Missing required fields" });
+            return res.status(400).json({ 
+                success: false,
+                message: "Missing required fields" 
+            });
         }
 
         // Kiểm tra email đã tồn tại
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "Email already in use" });
+            return res.status(400).json({
+                success: false,
+                message: "Email already in use" 
+            });
         }
 
         // Tạo user_id tự động
@@ -37,10 +43,18 @@ export const register = async (req, res) => {
         });
 
         await newUser.save();
-        res.status(201).json({ message: "User registered successfully", user: newUser });
+        res.status(201).json({ 
+            success: true,
+            message: "User registered successfully",
+            user: newUser 
+        });
     } catch (error) {
         console.error(error); // Hiển thị lỗi chi tiết trong terminal
-        res.status(500).json({ message: "Error registering user", error: error.message });
+        res.status(500).json({ 
+            success: false,
+            message: "Error registering user", 
+            error: error.message 
+        });
     }
 };
 
@@ -51,11 +65,11 @@ export const login = async (req, res) => {
 
         // Kiểm tra user có tồn tại không
         const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: "Invalid credentials" });
+        if (!user) return res.status(400).json({success: false, message: "Sai email hoặc mật khẩu!" });
 
         // So sánh mật khẩu
         const isMatch = await user.comparePassword(password);
-        if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+        if (!isMatch) return res.status(400).json({success: false, message: "Sai email hoặc mật khẩu!" });
 
         // Tạo token JWT để lưu trong cookie
         const token = generateToken({ _id: user._id, email: user.email, role: user.role });
@@ -69,12 +83,12 @@ export const login = async (req, res) => {
         res.cookie('refreshtoken',refreshToken, {httpOnly: true, maxAge: 7*24*3600*1000})
 
         res.status(200).json({ 
-            sussces: true,
+            success: true,
             token,
             user: { id: user.user_id, name: user.name, email: user.email, role: user.role }, 
         });
     } catch (error) {
-        res.status(500).json({ message: "Error logging in", error });
+        res.status(500).json({ message: "Lỗi  trong quá trình đăng nhập", error });
     }
 };
 
@@ -137,7 +151,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
     const hashedToken = createHash("sha256").update(token).digest("hex")
     const user = await User.findOne({passwordResetToken: hashedToken, passwordResetExpires: {$gt: Date.now()}})
 
-    if (!user) return res.status(400).json({message: "Token is invalid or has expired"})
+    if (!user) return res.status(400).json({success: false, message: "Token is invalid or has expired"})
 
     user.password = password
     user.passwordResetToken = undefined
@@ -151,12 +165,12 @@ export const resetPassword = asyncHandler(async (req, res) => {
 export const getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user._id).select("-password"); // Không trả về password
-        if (!user) return res.status(404).json({ message: "User not found" });
+        if (!user) return res.status(404).json({success: false,  message: "User not found" });
 
         res.status(200).json(user);
     } catch (error) {
         console.error("Error in fetching user:", error.mesage)
-        res.status(500).json({ message: "Error retrieving user data", error });
+        res.status(500).json({success: false,  message: "Error retrieving user data", error });
     }
 };
 

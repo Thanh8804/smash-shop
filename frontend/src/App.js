@@ -7,7 +7,7 @@ import { store } from './app/store';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
-      localStorage.getItem("isAuthenticated") === "false"
+    localStorage.getItem("isAuthenticated") === "false"
     );
     
     return (
