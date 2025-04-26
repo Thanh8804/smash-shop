@@ -1,21 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCake } from "@fortawesome/free-solid-svg-icons";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faCake } from "@fortawesome/free-solid-svg-icons";
 import './ProductDetail.css';
 import Header from '../../components/Header/Header';
 // import products from '../../data/products';
 import { useGetProductsQuery } from "../../features/product/productApi.js";
+import { apiAddItem } from '../../apis/cart.js';
+import Swal from 'sweetalert2';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItemToCart } from '../../app/store/cartSlice.js';
+
+
+
 const ProductDetail = () => {
+  const [quantity, setQuantity] = useState(1);
+  const [itemCart,setitemCart] = useState();
   const { id } = useParams();
-  const {data: products = [], isLoading} = useGetProductsQuery();
+  const {data: products = []} = useGetProductsQuery();
   const product = products.find((p) => p._id === id);
   const navigate = useNavigate();
+  const [loading,setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const status = useSelector(state => state.cart.status);
+  const dispatch = useDispatch();
 
+  const handleAddToCart = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    try {
+      // Gọi API thêm sản phẩm vào giỏ
+      const result = await dispatch(addItemToCart({
+        product_id: product._id,
+        quantity
+      }));
+
+      if (addItemToCart.fulfilled.match(result)) {
+        Swal.fire(`Thêm ${quantity} sản phẩm thành công!`, '', 'success');
+      }
+    } catch (err) {
+      console.error('Lỗi khi thêm vào giỏ:', err);
+      setError('Thêm vào giỏ thất bại. Vui lòng thử lại.');
+    } finally {
+      setLoading(false);
+    }
+  };
   if (!product) {
     return <div className="container">Không tìm thấy sản phẩm.</div>;
   }
-  console.log(`${process.env.REACT_APP_API_URL}/image/${product.images.image}`)
+
   return (
     <>
       <Header />
@@ -36,10 +70,40 @@ const ProductDetail = () => {
 
             <div className="quantity">
               <label>Số lượng: </label>
-              <button className="qty-btn">-</button>
-              <input type="number" min="1" value={1} readOnly />
-              <button className="qty-btn">+</button>
-              <button className="btn">Thêm vào giỏ</button>
+              
+              <button 
+              className="qty-btn"
+              onClick={() => setQuantity(q => Math.max(1, q - 1))}
+              >-</button>
+
+              <input 
+              type="number" 
+              min="1" 
+              max= {product.stock}
+              value={quantity} 
+              // readOnly
+              onChange={e => {
+                const val = Number(e.target.value);
+                // Giới hạn val trong khoảng [1, product.stock]
+                const clamped = Math.min(product.stock, Math.max(1, val));
+                setQuantity(clamped);
+              }}
+
+              />
+              <button 
+              className="qty-btn"
+              onClick={() => setQuantity(q => Math.min(product.stock, q + 1))}
+              >
+              +
+              </button>
+              
+              <button 
+              className="btn"
+              onClick={handleAddToCart}
+              disabled={loading}
+              >
+              Thêm vào giỏ
+              </button>
             </div>
             <p>Số lượng trong kho: {product.stock}</p>
             <p>Tình trạng: {/* Chưa có dữ liệu */}</p>

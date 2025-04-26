@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartShopping, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
 import "./Header.css"; 
 import { useNavigate } from "react-router-dom";
+import { selectTotalQuantity } from '../../../src/app/store/selectors.js';
+import { useSelector } from "react-redux";
 
 export default function Header({ isAuthenticated, setIsAuthenticated }) {
+  const totalQuantity = useSelector(selectTotalQuantity);
   const [productDropdown, setProductDropdown] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
   const navigate = useNavigate();
@@ -62,8 +65,11 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
 
       {/* Icons */}
       <div className="header-icons">
-        <Link to="/cart">
+        <Link to="/cart" className="cart-link">
           <FontAwesomeIcon icon={faCartShopping} className="icon" />
+          {totalQuantity > 0 && (
+            <span className="cart-badge">{totalQuantity}</span>
+          )}
         </Link>
 
         {/* User Menu */}

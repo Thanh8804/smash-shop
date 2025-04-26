@@ -85,7 +85,7 @@ export const login = async (req, res) => {
         res.status(200).json({ 
             success: true,
             token,
-            user: { id: user.user_id, name: user.name, email: user.email, role: user.role }, 
+            user: { id: user.user_id, name: user.name, email: user.email, role: user.role, count_cart: user.count_cart }, 
         });
     } catch (error) {
         res.status(500).json({ message: "Lỗi  trong quá trình đăng nhập", error });

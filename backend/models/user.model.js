@@ -24,7 +24,8 @@ const UserSchema = new mongoose.Schema({
             },
             quantity: Number
         }
-    ]
+    ],
+    count_cart: {type: Number},
 });
 
 // Băm mật khẩu trước khi lưu

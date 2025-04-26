@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { apiLogin } from "../../apis/user";
 import Swal from "sweetalert2";
+import { setCartCount } from "../../app/store/cartSlice";
+import { useDispatch } from "react-redux";
 
 export default function Login({ setIsAuthenticated }) {
-
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -16,11 +18,16 @@ export default function Login({ setIsAuthenticated }) {
   const handleLogin = async(e) => {
     e.preventDefault();
     try {
+      const response = await apiLogin({email,password});
       //Thông báo thành công
-      await apiLogin({email,password});
       Swal.fire('Đăng nhập thành công!', '', 'success');
       setIsAuthenticated(true);
       localStorage.setItem("isAuthenticated", "true"); // Lưu trạng thái đăng nhập
+      // Dispatch count_cart từ API vào Redux
+      const count = response.user.count_cart || 0;
+      dispatch(setCartCount(count));
+      const token = response.token;
+      localStorage.setItem('authToken', token);
       navigate("/");
     } catch (err) {
       //Lỗi từ API
@@ -45,7 +52,7 @@ export default function Login({ setIsAuthenticated }) {
   };
 
   return (
-    <dix className="container">
+    <div className="container">
     <Header setIsAuthenticated={setIsAuthenticated}/>
         <div className="login-container">
         <div className="login-box">
@@ -80,6 +87,6 @@ export default function Login({ setIsAuthenticated }) {
             </p>
         </div>
         </div>
-    </dix>
+    </div>
   );
 }

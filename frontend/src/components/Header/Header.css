@@ -123,6 +123,24 @@
     color: black;
   }
   
+  .cart-link {
+    position: relative;
+  }
+  .cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: red;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   /* User Menu */
   .user-menu {
     position: relative;
