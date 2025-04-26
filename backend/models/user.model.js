@@ -16,6 +16,16 @@ const UserSchema = new mongoose.Schema({
     refreshToken: { type: String },
     passwordResetToken: { type: String },
     passwordResetExpires: { type: Date },
+    cart: [
+        {
+            product: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Product'
+            },
+            quantity: Number
+        }
+    ],
+    count_cart: {type: Number},
 });
 
 // Băm mật khẩu trước khi lưu

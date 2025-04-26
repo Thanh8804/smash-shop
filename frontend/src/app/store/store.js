@@ -1,13 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../../src/features/user/userSlice'; 
-import productReducer from '../../src/features/product/productSlice'
-import { productApi } from '../features/product/productApi';
+import userReducer from '../../features/user/userSlice'; 
+import productReducer from '../../features/product/productSlice'
+import { productApi } from '../../features/product/productApi';
 // import productsReducer from '../features/products/productsSlice';
-
+import cartReducer from '../store/cartSlice.js'
 export const store = configureStore({ // Khai báo store để lưu trữ state 
   reducer: {
     user: userReducer,
-    [productApi.reducerPath]: productApi.reducer
+    [productApi.reducerPath]: productApi.reducer,
+    cart: cartReducer,
     // products: productsReducer,
   },  
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(productApi.middleware)

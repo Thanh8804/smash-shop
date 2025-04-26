@@ -3,11 +3,11 @@ import pages from './routes';
 import './App.css';
 import { useEffect, useState } from "react";
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { store } from './app/store/store';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(
-      localStorage.getItem("isAuthenticated") === "false"
+    localStorage.getItem("isAuthenticated") === "false"
     );
     
     return (

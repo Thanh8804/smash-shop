@@ -1,25 +1,25 @@
 import mongoose from 'mongoose';
 
 const OrderSchema = new mongoose.Schema({
-    order_id: { type: Number, required: true, unique: true },
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    products: [{
+        product: {type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        count: {type: Number, default: 1},
+        color: {type: String},
+    }],
     dateCreated: { type: Date, default: Date.now },
     total_price: { type: Number, required: true },
-    status: { type: String },
-    datePaid: { type: Date },
+    status: { 
+        type: String ,
+        default: "Processing",
+        enum: ["Cancelled","Processing","Succeeded"],
+    },    
     pay_method: { type: String },
-    location: { type: String }
-}, 
-{
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-});
-// tạo virtual field
-OrderSchema.virtual('order_details', {
-    ref: 'OrderDetail',
-    localField: '_id',
-    foreignField: 'order_id',
-  });
+    orderBy: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+    }
+}); 
+
 const Order = mongoose.model('Order', OrderSchema);
 
 export default Order;
