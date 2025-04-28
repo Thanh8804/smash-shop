@@ -51,7 +51,12 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
     navigate("/");
     localStorage.removeItem("isAuthenticated"); // Xóa dữ liệu đăng nhập
   };
-
+  // MOBILE MENU CONTROLLER
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
+  
   return (
     <header className="header" >
       {/* Logo + Home */}
