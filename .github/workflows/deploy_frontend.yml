@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  build-and-push-dockerfile-image:
+  build-and-push-dockerfile-image-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,3 +27,5 @@ jobs:
           tags: | 
             doanlam2704/ie213-frontend:latest
           platforms: linux/amd64
+          build-args: |
+            REACT_APP_BACKEND_URL=${{ secrets.REACT_APP_API_URL }}
