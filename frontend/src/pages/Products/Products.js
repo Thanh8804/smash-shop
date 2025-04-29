@@ -28,42 +28,13 @@
     const [selectedBrands, setSelectedBrands] = useState([]);
     const [selectedTypes, setSelectedTypes] = useState([]);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const limit = 12;
+    // const { data = {}, isLoading } = useGetAllProductsQuery({ page: currentPage, limit });
+    // const { data: products = [], totalPages = 1 } = data;
+   const {data: products = []} = useGetProductsQuery();
+ 
 
-    // const [products, setProducts] = useState([]);
-    // useEffect(() => {
-    //   const fetchProducts = async () => {
-    //     try {
-    //       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/v1/products`);
-    //       setProducts(response.data.data);
-    //       setFilteredProducts(response.data.data);
-    //       console.log('Response Data:', response.data.data);
-    //     } catch (error) { 
-    //       console.error("Error fetching products:", error);
-    //     }
-    //   };
-    //     fetchProducts();},[]);
-    const {data: products = [], isLoading} = useGetProductsQuery({
-      page: currentPage,
-      limit: itemsPerPage,
-    });
-
-    // const products = data || [];  // if (isLoading) return <p>Loading...</p>;
-    // if (error) return <p>Failed to load products</p>;
-    // const products = data
-  //
-    // const dispatch = useDispatch();
-
-    // useEffect(()=>{
-    //     dispatch(fetchAllProducts()); //gọi thunk 
-    // }, [dispatch]);
-
-    // const products = useSelector(state => state.products.items);
-
-    // useEffect(() => {
-    //   setFilteredProducts(products); // cập nhật khi redux cập nhật
-    // }, [products]);
     const sortProducts = (productsToSort) => {
       switch (sortOption) {
         case 'Phổ biến':
@@ -154,7 +125,6 @@
                 </div>
               </div>
             </div>
-
       </div>
       <div className="product-page">
 
@@ -200,6 +170,7 @@
           isPaginated={true} 
           // currentPage={currentPage}
           // setCurrentPage={setCurrentPage}
+          // totalPages={totalPages}
         />
       </div>
       <Footer/>
