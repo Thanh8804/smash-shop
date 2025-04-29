@@ -8,6 +8,7 @@ ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
 COPY package*.json ./
 RUN NODE_ENV=development npm i
+
 COPY . ./
 RUN npm run build
 
