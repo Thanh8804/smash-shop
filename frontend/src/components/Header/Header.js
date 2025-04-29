@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faUser, faSearch, faBars, faTimes, faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import "./Header.css"; 
 import { useNavigate } from "react-router-dom";
 import { selectTotalQuantity } from '../../../src/app/store/selectors.js';
@@ -59,41 +59,54 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
   
   return (
     <header className="header" >
-      {/* Logo + Home */}
+      {/* Logo + Menu Button */}
       <div className="header-left">
         <Link to="/" className="logo">Smash Shop</Link>
-        {/* <Link to="/" className="logo-img"><img src={logo}/></Link> */}
-        <Link to="/" className="nav-link">TRANG CHỦ</Link>
-      </div>
-
-      {/* Navigation */}
-      <div 
-        className="nav-dropdown "
-        onMouseEnter={() => setProductDropdown(true)}
-        onMouseLeave={() => setProductDropdown(false)}
-      >
-        <button
-          className="dropdown-btn nav-link"
-          onClick={() => navigate("/products")}
-        >
-            SẢN PHẨM         
+        <button className="mobile-menu-btn" onClick={toggleMobileMenu}>
+          <FontAwesomeIcon icon={isMobileMenuOpen ? faTimes : faBars} />
         </button>
-        {productDropdown && (
-          <div className="dropdown-menu">
-            {["Vợt cầu lông", "Lưới cầu lông", "Giày cầu lông", "Quấn cán", "Túi cầu lông"].map((item) => (
-              <Link
-                key={item}
-                to={`/products/${item}`}
-                className="dropdown-item"
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* <Link to="/" className="nav-link">BÀI VIẾT</Link> */}
+      {/* Navigation + SearchBar */}
+      <div className={`header-center ${isMobileMenuOpen ? 'active' : ''}`}>
+        {/* Các link Nav */}
+        <Link to="/" className="nav-link">TRANG CHỦ</Link>
+
+        <div 
+          className="nav-dropdown"
+          
+        >
+          <button className="dropdown-btn nav-link">
+            {/* Phần chữ: Bấm vào để navigate */}
+            <span 
+              onClick={() => navigate("/products")}
+              onMouseEnter={() => setProductDropdown(true)}
+              onMouseLeave={() => setProductDropdown(false)}
+            >
+              SẢN PHẨM
+            </span>
+
+            {/* Icon: Bấm vào để toggle dropdown */}
+            <FontAwesomeIcon 
+              icon={productDropdown ? faCaretUp : faCaretDown} 
+              onClick={(e) => {
+                e.stopPropagation(); // chặn sự kiện lan ra button
+                setProductDropdown(prev => !prev); // toggle mở/đóng
+              }} 
+              
+            />
+          </button>
+          
+          {productDropdown && (
+            <div className="dropdown-menu">
+              {["Vợt cầu lông", "Lưới cầu lông", "Giày cầu lông", "Quấn cán", "Túi cầu lông"].map((item) => (
+                <Link key={item} to={`/products/${item}`} className="dropdown-item">
+                  {item}
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
       
       {/* Search Bar */}
       <div className="search-bar">
@@ -128,6 +141,8 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
         )}
       </div>
 
+      </div>
+
 
       {/* Icons */}
       <div className="header-icons">
@@ -143,6 +158,7 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
           className="user-menu"
           onMouseEnter={() => setUserDropdown(true)}
           onMouseLeave={() => setUserDropdown(false)}
+          onClick={() => setUserDropdown(prev => !prev)}
         >
           <FontAwesomeIcon icon={faUser} className="icon" />
           {userDropdown && (

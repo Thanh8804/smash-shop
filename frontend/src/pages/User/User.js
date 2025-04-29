@@ -19,7 +19,7 @@ export default function User({ isAuthenticated, setIsAuthenticated }) {
   const menuItems = [
     { label: "Thông tin tài khoản", icon: faUser, path: "/user/profile" },
     { label: "Đơn hàng đã đặt", icon: faClipboardList, path: "/user/orders" },
-    { label: "Đổi mật khẩu", icon: faLock, path: "/user/change-password" },
+    { label: "Đổi mật khẩu", icon: faLock, path: "/user/reset-password" },
     { label: "Đăng xuất", icon: faSignOutAlt, path: "#" }, // Không điều hướng ngay
   ];
 

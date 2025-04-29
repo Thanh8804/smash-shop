@@ -7,7 +7,7 @@ import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useGetProductsQuery } from '../../../features/product/productApi';
 
 export default function AdminProducts() {
-  const {data: products = [], isLoading} = useGetProductsQuery();
+  const {data: products = [], refetch, isLoading} = useGetProductsQuery();
   const [productList, setProductList] = useState(products);
   const [showConfirm, setShowConfirm] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
