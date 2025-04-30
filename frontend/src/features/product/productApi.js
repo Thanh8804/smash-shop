@@ -5,7 +5,19 @@ export const productApi = createApi({
     baseQuery: fetchBaseQuery ({baseUrl: `${process.env.REACT_APP_API_URL}/api/v1/` }),
     endpoints: (builder) => ({
         getAllProducts: builder.query({
-            query: ({ page = 1, limit = 12 }) => `products?page=${page}&limit=${limit}`,
+            query: ({ search, brand, type, category, minPrice, maxPrice, page = 1, limit = 12, sort }) => {
+                const params = new URLSearchParams();
+                if (search) params.append("search", search);
+                if (brand?.length) params.append("brand", brand.join(","));
+                if (type?.length) params.append("type", type.join(","));
+                if (category) params.append("category", category);
+                if (sort) params.append("sort", sort);
+                if (minPrice !== '') params.append("minPrice", minPrice); 
+                if (maxPrice !== '') params.append("maxPrice", maxPrice); 
+                params.append("page", page);
+                params.append("limit", limit);
+                return `/products?${params.toString()}`;
+              },
             transformResponse: (response) => ({
                 data: response.data,
                 page: response.page,
@@ -32,6 +44,12 @@ export const productApi = createApi({
               body: productData,
             }),
         }),
+        getAllBrands: builder.query({
+            query: () => `/brands`, 
+        }),
+        getAllTypes: builder.query({
+            query: () => `/types`,
+        }),
     })
 })
-export const { useGetProductsQuery, useGetAllProductsQuery,  useCreateProductMutation, useUpdateProductMutation  } = productApi;  
+export const { useGetProductsQuery, useGetAllProductsQuery,  useCreateProductMutation, useUpdateProductMutation, useGetAllBrandsQuery, useGetAllTypesQuery  } = productApi;  

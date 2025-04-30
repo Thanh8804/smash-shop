@@ -4,6 +4,7 @@ import Brand from '../models/brand.model.js';
 import ProductImage from '../models/productImage.model.js';
 import Type from '../models/type.model.js'
 import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 
 // Lấy sản phẩm theo id 
 export const fetchProductById = async (req, res) => {
@@ -40,19 +41,28 @@ export const fetchAllProducts = async (req, res) => {
     const category = (req.query.category) || ''
     const categoryFilter = (category) ? {'category_id':category } : {};
 
-    // Type Filter
-    const type = (req.query.type) || ''
-    const typeFilter = (type) ? {'type_id':type } : {};
-
     // Brand Filter
     const brand = (req.query.brand) || ''
     const brandFilter = (brand) ? {brand_id: brand} : {}
+    // const brand = req.query.brand?.split(',') || [];
+    // const brandFilter = brand.length
+    //   ? { brand_id: { $in: brand.map(id => new ObjectId(id)) } }
+    //   : {}; 
+
+    // Type Filter
+    const type = (req.query.type) || ''
+    const typeFilter = (type) ? {type_id: type} : {}
+    // const type = req.query.type?.split(',') || [];
+    // const typeFilter = type.length
+    // ? { type_id: { $in: type.map(id => new ObjectId(id)) } }
+    // : {};
     
-    // Active product Filter
-    const activeFilter = {is_active: true}
+    // keyword search Filter //bổ sung
+    const search = req.query.search || '';
+    const keywordFilter = search ? { prod_name: { $regex: search, $options: 'i' } } : {};
 
     // Combine filters
-    const query = { ...priceFilter, ...categoryFilter, ...brandFilter, ...typeFilter, ...activeFilter};
+    const query = { ...priceFilter, ...categoryFilter, ...brandFilter, ...typeFilter, ...keywordFilter};
     // Pagination 
     const totalDocument = await Product.countDocuments(query);   //Tính tổng số sản phẩm
     const page = parseInt(req.query.page) || 1;

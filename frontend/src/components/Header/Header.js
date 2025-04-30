@@ -8,11 +8,13 @@ import { selectTotalQuantity } from '../../../src/app/store/selectors.js';
 import { useDispatch, useSelector } from "react-redux";
 import { setSearchTerm, clearSearchTerm } from "../../features/search/searchSlice";
 import { useGetProductsQuery } from "../../features/product/productApi";
+import { useGetCategoriesQuery } from "../../features/services/categoryApi.js";
+
 // import logo from "../../assets/Logo2-long.png"
 
 export default function Header({ isAuthenticated, setIsAuthenticated }) {
   const totalQuantity = useSelector(selectTotalQuantity);
-
+  const { data: categories, isLoading, isError } = useGetCategoriesQuery();
   // SEARCH BAR
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,6 +46,16 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
 
   const [productDropdown, setProductDropdown] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
+  // Hàm chuyển tiếng Việt có dấu sang không dấu và format URL-friendly
+  const slugify = (str) => {
+    return str
+      .normalize('NFD')                   // tách dấu khỏi ký tự gốc
+      .replace(/[\u0300-\u036f]/g, '')    // xóa các dấu
+      .replace(/đ/g, 'd')                 // đ -> d
+      .replace(/Đ/g, 'D')
+      .replace(/\s+/g, '-')               // space -> dấu gạch ngang
+      .toLowerCase();
+  };
 
   // LOGOUT
   const handleLogout = () => {
@@ -74,14 +86,13 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
 
         <div 
           className="nav-dropdown"
-          
+          onMouseEnter={() => setProductDropdown(true)}
+          onMouseLeave={() => setProductDropdown(false)}
         >
           <button className="dropdown-btn nav-link">
             {/* Phần chữ: Bấm vào để navigate */}
             <span 
               onClick={() => navigate("/products")}
-              onMouseEnter={() => setProductDropdown(true)}
-              onMouseLeave={() => setProductDropdown(false)}
             >
               SẢN PHẨM
             </span>
@@ -98,14 +109,20 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
           </button>
           
           {productDropdown && (
-            <div className="dropdown-menu">
-              {["Vợt cầu lông", "Lưới cầu lông", "Giày cầu lông", "Quấn cán", "Túi cầu lông"].map((item) => (
-                <Link key={item} to={`/products/${item}`} className="dropdown-item">
-                  {item}
-                </Link>
-              ))}
-            </div>
-          )}
+              <div className="dropdown-menu">
+                {isLoading && <p className="dropdown-item">Đang tải...</p>}
+                {isError && <p className="dropdown-item">Lỗi khi tải danh mục</p>}
+                {!isLoading && !isError && categories?.map((cat) => (
+                  <Link
+                    key={cat._id}
+                    to={`/products/${encodeURIComponent(slugify(cat.category_name))}`}
+                    className="dropdown-item"
+                  >
+                    {cat.category_name}
+                  </Link>
+                ))}
+              </div>
+            )}
         </div>
       
       {/* Search Bar */}
