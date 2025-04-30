@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log('Đăng nhập:', { email, password });
-    // Gọi API login 
+
+    if (email.trim() !== '' && password.trim() !== '') { ///không rỗng thì cho vào
+      console.log('Đăng nhập:', { email, password });
+      // Gọi API login 
+      navigate('/admin');
+    } else {
+      alert('Vui lòng nhập đầy đủ email và mật khẩu');
+    }
   };
 
   return (
@@ -33,7 +41,6 @@ const AdminLogin = () => {
         />
         <button type="submit" className="ad-button">Đăng nhập</button>
       </form>
-
     </div>
   );
 };

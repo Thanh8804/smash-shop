@@ -57,7 +57,6 @@ const pages = [
         ],
     },
     { path: 'admin-login', Component: AdminLogin },
-    { path: 'admin-register', Component: AdminRegister },
 ];
 
 export default pages;
