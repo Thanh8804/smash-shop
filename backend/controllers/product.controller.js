@@ -5,10 +5,11 @@ import ProductImage from '../models/productImage.model.js';
 import Type from '../models/type.model.js'
 import mongoose from 'mongoose';
 
+// Lấy sản phẩm theo id 
 export const fetchProductById = async (req, res) => {
     const productId = req.params.id; // lấy từ URL parameter
     try {
-        const product = await Product.findOne({ _id: productId })
+        const product = await Product.findOne({ _id: productId , is_active: true})
             .populate('category_id')
             .populate('brand_id')
             .populate('type_id')
@@ -28,6 +29,7 @@ export const fetchProductById = async (req, res) => {
     }
 }
 
+// Lấy thông tin tất cả sản phẩm
 export const fetchAllProducts = async (req, res) => {
     // Price Filter 
     const minPrice = parseInt(req.query.minPrice) || 0
@@ -38,11 +40,19 @@ export const fetchAllProducts = async (req, res) => {
     const category = (req.query.category) || ''
     const categoryFilter = (category) ? {'category_id':category } : {};
 
+    // Type Filter
+    const type = (req.query.type) || ''
+    const typeFilter = (type) ? {'type_id':type } : {};
+
     // Brand Filter
     const brand = (req.query.brand) || ''
     const brandFilter = (brand) ? {brand_id: brand} : {}
+    
+    // Active product Filter
+    const activeFilter = {is_active: true}
+
     // Combine filters
-    const query = { ...priceFilter, ...categoryFilter, ...brandFilter};
+    const query = { ...priceFilter, ...categoryFilter, ...brandFilter, ...typeFilter, ...activeFilter};
     // Pagination 
     const totalDocument = await Product.countDocuments(query);   //Tính tổng số sản phẩm
     const page = parseInt(req.query.page) || 1;
@@ -101,6 +111,7 @@ export const fetchAllProducts = async (req, res) => {
     }
 }
 
+// Tạo sản phẩm mới
 export const createProduct = async(req,res) =>{
     const {prod_name, description, price, stock, discount, category_id, brand_id, type_id} = req.body // tên biến phải giống với tên các key trong object được gửi từ frontend 
 
@@ -130,4 +141,61 @@ export const createProduct = async(req,res) =>{
         console.error("Error in creating product:", e.message);
         return res.status(500).json({success: false, message: "Server Error"});
     }    
+}
+
+// Cập nhật thông tin sản phẩm
+export const updateProduct = async(req,res) => {
+    const productId = req.params.id;
+    const {prod_name, description, price, stock, discount, quantity_sold, category_id, brand_id, type_id} = req.body
+
+    if (!prod_name || !price || !description || !stock || !discount || !quantity_sold || !category_id || !brand_id || !type_id) {
+        return res.status(400).json({success: false, message: "Please fill full required information"})
+    }
+
+    try {
+        const product = await Product.findByIdAndUpdate(
+            productId,
+            { 
+                prod_name: prod_name,
+                price: price,
+                description: description,
+                quantity_sold: quantity_sold,
+                stock: stock,
+                discount: discount || 0,
+                category_id: category_id,
+                brand_id: brand_id,
+                type_id: type_id
+            },
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        return res.status(200).json({ success: true, data: product });
+    } catch (e) {
+        console.error("Error in updating product:", e.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
+}
+
+export const deactiveProduct = async (req, res) => {
+    const productId = req.params.id;
+    try {
+        const product = await Product.findByIdAndUpdate(
+            productId,
+            { is_active: false },
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
+        return res.status(200).json({ success: true, message: "Product deleted successfully" });
+    } catch (e) {
+        console.error("Error in deleting product:", e.message);
+        return res.status(500).json({ success: false, message: "Server Error" });
+    }
 }
