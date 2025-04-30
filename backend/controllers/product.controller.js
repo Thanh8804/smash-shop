@@ -36,7 +36,7 @@ export const fetchAllProducts = async (req, res) => {
     const minPrice = parseInt(req.query.minPrice) || 0
     const maxPrice = parseInt(req.query.maxPrice) || Number.MAX_VALUE
     const priceFilter = (minPrice > 0 || maxPrice < Number.MAX_VALUE) ? { price: { $gte: minPrice, $lte: maxPrice } } : {};
-    
+    const activeFilter = {is_active: true}
     // Category Filter
     const category = (req.query.category) || ''
     const categoryFilter = (category) ? {'category_id':category } : {};
@@ -62,7 +62,7 @@ export const fetchAllProducts = async (req, res) => {
     const keywordFilter = search ? { prod_name: { $regex: search, $options: 'i' } } : {};
 
     // Combine filters
-    const query = { ...priceFilter, ...categoryFilter, ...brandFilter, ...typeFilter, ...keywordFilter};
+    const query = { ...priceFilter, ...categoryFilter, ...brandFilter, ...typeFilter, ...keywordFilter, ...activeFilter};
     // Pagination 
     const totalDocument = await Product.countDocuments(query);   //Tính tổng số sản phẩm
     const page = parseInt(req.query.page) || 1;

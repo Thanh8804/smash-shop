@@ -12,35 +12,43 @@ const AdminEditProduct = () => {
   const [updateProduct] = useUpdateProductMutation();
   const [uploadImage] = useCreateProductImageMutation();
 
-  const productToEdit = products.find((p) => p._id === id);
+  const initialData = products.find((p) => p._id === id);
 
   const handleUpdate = async (data) => {
     try {
       const { images, ...productData } = data;
 
-      // B1: Gửi cập nhật sản phẩm
+      // B1: Cập nhật sản phẩm
       await updateProduct({ id, productData }).unwrap();
 
-      // B2: Nếu có hình mới, upload
+      // B2: Upload ảnh mới nếu có
       if (images && images.length > 0 && images[0] instanceof File) {
-        const formData = new FormData();
-        images.forEach((image) => formData.append('images', image));
-        await uploadImage({ productId: id, imageData: formData }).unwrap();
+        for (let i = 0; i < images.length; i++) {
+          const formData = new FormData();
+          formData.append('image', images[i]);
+          formData.append('prod_id', id);
+          formData.append('is_primary_image', i === 0 ? 'true' : 'false');
+          await uploadImage(formData).unwrap();
+        }
       }
 
       await refetch();
-      navigate('/admin/products');
+      if (window.confirm("Cập nhật thành công! Quay lại danh sách?")) {
+        navigate('/admin/products');
+      }
+
     } catch (err) {
-      console.error("Lỗi khi cập nhật:", err);
+      console.error("Lỗi khi cập nhật sản phẩm:", err);
+      alert("Không thể cập nhật sản phẩm. Kiểm tra thông tin hoặc kết nối mạng.");
     }
   };
 
-  if (isLoading || !productToEdit) return <div>Đang tải...</div>;
+  if (isLoading || !initialData) return <div>Đang tải...</div>;
 
   return (
     <div className="admin-edit-product">
       <AdminProductForm
-        initialData={productToEdit}
+        initialData={initialData}
         onSubmit={handleUpdate}
         isEdit
       />

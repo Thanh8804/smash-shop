@@ -50,6 +50,12 @@ export const productApi = createApi({
         getAllTypes: builder.query({
             query: () => `/types`,
         }),
+        deactiveProduct: builder.mutation({
+            query: (productId) => ({
+                url: `products/deactive/${productId}`,
+                method: 'PUT',
+            }),
+        }),
     })
 })
-export const { useGetProductsQuery, useGetAllProductsQuery,  useCreateProductMutation, useUpdateProductMutation, useGetAllBrandsQuery, useGetAllTypesQuery  } = productApi;  
+export const { useGetProductsQuery, useGetAllProductsQuery,  useCreateProductMutation, useUpdateProductMutation, useGetAllBrandsQuery, useGetAllTypesQuery, useDeactiveProductMutation  } = productApi;  

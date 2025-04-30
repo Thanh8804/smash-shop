@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './AdminAuth.css';
+import './AdminLogin.css';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -8,7 +8,7 @@ const AdminLogin = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     console.log('Đăng nhập:', { email, password });
-    // Gọi API login ở đây
+    // Gọi API login 
   };
 
   return (
@@ -33,9 +33,7 @@ const AdminLogin = () => {
         />
         <button type="submit" className="ad-button">Đăng nhập</button>
       </form>
-      <p className="ad-footer">
-        Bạn chưa có tài khoản? <a href="/admin-register" className="ad-link">Đăng ký</a>
-      </p>
+
     </div>
   );
 };
