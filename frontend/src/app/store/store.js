@@ -3,6 +3,8 @@ import userReducer from '../../features/user/userSlice';
 import productReducer from '../../features/product/productSlice'
 import { productApi } from '../../features/product/productApi';
 import { orderApi } from '../../features/order/orderApi.js';
+import { categoryApi } from '../../features/services/categoryApi.js';
+import { statisticsApi } from '../../features/statistics/statisticsApi.js';
 import searchReducer from '../../features/search/searchSlice';
 // import productsReducer from '../features/products/productsSlice';
 import cartReducer from '../store/cartSlice.js'
@@ -11,6 +13,8 @@ export const store = configureStore({ // Khai báo store để lưu trữ state
     user: userReducer,
     [productApi.reducerPath]: productApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
+    [statisticsApi.reducerPath]: statisticsApi.reducer,
+    [categoryApi.reducerPath]: categoryApi.reducer,
     cart: cartReducer,
     search: searchReducer,
     // products: productsReducer,
@@ -18,4 +22,6 @@ export const store = configureStore({ // Khai báo store để lưu trữ state
   middleware: (getDefaultMiddleware) => getDefaultMiddleware()
   .concat(productApi.middleware)
   .concat(orderApi.middleware)
+  .concat(statisticsApi.middleware)
+  .concat(categoryApi.middleware)
 });

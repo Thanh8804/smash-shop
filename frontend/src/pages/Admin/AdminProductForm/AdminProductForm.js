@@ -64,14 +64,19 @@ const AdminProductForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
 
   useEffect(() => {
     if (isEdit && initialData) {
+      const existingImages = (initialData.images || []).map(img =>
+        typeof img === 'string' ? img : img.image_url
+      );
+  
       setFormData({
         ...initialData,
         category_id: initialData.category_id?._id,
         brand_id: initialData.brand_id?._id,
         type_id: initialData.type_id?._id,
-        images: initialData.images || [],
+        images: [],
       });
-      setImagePreview(initialData.images);
+  
+      setImagePreview(existingImages);
     }
   }, [initialData, isEdit]);
 
@@ -83,7 +88,7 @@ const AdminProductForm = ({ initialData = {}, onSubmit, isEdit = false }) => {
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     const preview = files.map((file) => URL.createObjectURL(file));
-    setImagePreview(preview);
+    setImagePreview(preview); // hoặc [...imagePreview, ...preview] nếu muốn giữ ảnh cũ
     setFormData((prev) => ({ ...prev, images: files }));
   };
 

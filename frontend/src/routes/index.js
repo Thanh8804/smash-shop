@@ -18,8 +18,8 @@ import AdminOrders from '../pages/Admin/AdminOrders/AdminOrders';
 import AdminStatistics from '../pages/Admin/AdminStatistics/AdminStatistics';
 import AdminProductDetail from '../pages/Admin/AdminProductDetail/AdminProductDetail';
 import AdminOrderDetail from '../pages/Admin/AdminOrderDetail/AdminOrderDetail';
-import AdminLogin from '../pages/Admin/AdminLogin';
-import AdminRegister from '../pages/Admin/AdminRegister';
+import AdminLogin from '../pages/Admin/AdminLogin/AdminLogin';
+
 
 import { Navigate } from "react-router-dom";
 
@@ -57,7 +57,6 @@ const pages = [
         ],
     },
     { path: 'admin-login', Component: AdminLogin },
-    { path: 'admin-register', Component: AdminRegister },
 ];
 
 export default pages;

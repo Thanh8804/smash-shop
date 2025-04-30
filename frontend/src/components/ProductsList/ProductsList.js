@@ -2,20 +2,11 @@ import ProductCard from "../ProductCard/ProductCard";
 import "./ProductsList.css";
 import { useState } from "react";
 
-  const ProductsList = ({ products, fullWidth, isPaginated }) => {
-  const itemsPerPage = 12; 
-  const [currentPage, setCurrentPage] = useState(1);
-    // Tính tổng số trang
-  const totalPages = Math.ceil(products.length / itemsPerPage);
-
-  // Cắt danh sách sản phẩm dựa trên trang hiện tại (chỉ khi có phân trang)
-  const displayedProducts = isPaginated
-    ? products.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-    : products;
+  const ProductsList = ({ products, fullWidth, isPaginated, currentPage, setCurrentPage, totalPages }) => {
     return (
       <div className="products-list-container">
         <div className={`products-list ${fullWidth ? "full-width" : "narrow-width"}`}>
-          {displayedProducts.map((product) => (
+          {products.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
