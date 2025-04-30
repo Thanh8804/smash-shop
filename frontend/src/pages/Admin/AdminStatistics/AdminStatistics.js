@@ -21,9 +21,10 @@ import { useGetStatisticsQuery } from '../../../features/statistics/statisticsAp
 import dayjs from 'dayjs';
 
 const AdminStatistics = () => {
-   // Lấy dữ liệu 10 ngày gần nhất
   const endDate = dayjs().format('YYYY-MM-DD');
   const startDate = dayjs().subtract(10, 'day').format('YYYY-MM-DD');
+
+ 
   const { data, isLoading, isError } = useGetStatisticsQuery({ startDate, endDate });
 
   if (isLoading) return <p>Đang tải dữ liệu thống kê...</p>;
