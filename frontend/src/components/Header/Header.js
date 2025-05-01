@@ -13,6 +13,7 @@ import { useGetCategoriesQuery } from "../../features/services/categoryApi.js";
 // import logo from "../../assets/Logo2-long.png"
 
 export default function Header({ isAuthenticated, setIsAuthenticated }) {
+  const count = useSelector(state => state.cart.items.length);
   const totalQuantity = useSelector(selectTotalQuantity);
   const { data: categories, isLoading, isError } = useGetCategoriesQuery();
   // SEARCH BAR
@@ -39,6 +40,7 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
       navigate(`/products?search=${searchTerm}`);
     }
   };
+
    // Lọc sản phẩm theo tên
   const filteredProducts = allProducts.filter((p) =>
     p.prod_name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -165,8 +167,8 @@ export default function Header({ isAuthenticated, setIsAuthenticated }) {
       <div className="header-icons">
         <Link to="/cart" className="cart-link">
           <FontAwesomeIcon icon={faCartShopping} className="icon" />
-          {totalQuantity > 0 && (
-            <span className="cart-badge">{totalQuantity}</span>
+          {count > 0 && (
+            <span className="cart-badge">{count}</span>
           )}
         </Link>
 

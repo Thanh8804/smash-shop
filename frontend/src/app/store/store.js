@@ -8,8 +8,11 @@ import { statisticsApi } from '../../features/statistics/statisticsApi.js';
 import searchReducer from '../../features/search/searchSlice';
 // import productsReducer from '../features/products/productsSlice';
 import cartReducer from '../store/cartSlice.js'
+import authReducer from './authSlice.js';
+
 export const store = configureStore({ // Khai báo store để lưu trữ state 
   reducer: {
+    auth: authReducer,
     user: userReducer,
     [productApi.reducerPath]: productApi.reducer,
     [orderApi.reducerPath]: orderApi.reducer,
