@@ -24,6 +24,14 @@ COPY . .
 # Stage 2: Production
 FROM node:22.14-alpine AS production
 
+# Tạo user và group với home directory hợp lệ
+RUN addgroup --system appgroup && \
+    adduser --system --ingroup appgroup --home /home/appuser appuser
+
+# Tạo home và thư mục làm việc, set quyền
+RUN mkdir -p /home/appuser /app && \
+    chown -R appuser:appgroup /home/appuser /app
+
 WORKDIR /app
 
 ENV NODE_ENV=production
