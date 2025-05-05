@@ -1,6 +1,14 @@
 # Stage 1: Build
 FROM node:22.14-alpine AS build 
 
+# Tạo user và group với home directory hợp lệ
+RUN addgroup --system appgroup && \
+    adduser --system --ingroup appgroup --home /home/appuser appuser
+
+# Tạo home và thư mục làm việc, set quyền
+RUN mkdir -p /home/appuser /app && \
+    chown -R appuser:appgroup /home/appuser /app
+    
 # Set working directory
 WORKDIR /app 
 
