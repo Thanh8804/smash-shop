@@ -42,8 +42,7 @@ app.use(passport.session());
 
 // Middleware
 app.use(cors({
-    origin: [FRONTEND_URL,FRONTEND_URL_VERCEL], // KHÔNG được dùng '*'
-    origin: [FRONTEND_URL,FRONTEND_URL_VERCEL], // KHÔNG được dùng '*'
+    origin: "http://34.53.70.78:30003", // KHÔNG được dùng '*'
     credentials: true               // Cho phép gửi cookie
 }));
 
