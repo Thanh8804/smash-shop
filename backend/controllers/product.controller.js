@@ -201,7 +201,7 @@ export const createProduct = async(req,res) =>{
 // Cập nhật thông tin sản phẩm
 export const updateProduct = async(req,res) => {
     const productId = req.params.id;
-    const {prod_name, description, price, stock, discount, quantity_sold, category_id, brand_id, type_id} = req.body
+    let {prod_name, description, price, stock, discount, quantity_sold, category_id, brand_id, type_id} = req.body
 
     if (!prod_name || !price || !description || !stock || !discount || quantity_sold === undefined || !category_id || !brand_id || !type_id) {
         return res.status(400).json({success: false, message: "Please fill full required information"})
