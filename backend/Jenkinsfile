@@ -212,8 +212,7 @@ spec:
                         sh '''
                             set -e
                             git clone https://github.com/Thanh8804/smash-shop-k8s-mainfest.git
-                            cd smash-shop-k8s-mainfest
-                            cd k8s-manifests
+                            cd smash-shop-k8s-mainfest/k8s-manifests/backend
                             sed -i.bak "s|thanh8804/smash-shop-backend-image:.*|thanh8804/smash-shop-backend-image:$IMAGE_TAG|" deployment.yaml
                             git config user.email "chithanh080804@gmail.com"
                             git config user.name "Thanh8804@"
