@@ -61,10 +61,11 @@ spec:
     stages {
         stage('Install tools'){
             parallel{
-                stage('Check npm') {
+                stage('Check npm and install git') {
                     steps {
                         container('node') {
                             sh 'npm version'
+                            sh 'apk add --no-cache git'
                         }
                     }
                 }
@@ -77,13 +78,6 @@ spec:
                                 export PATH=$JAVA_HOME/bin:$PATH
                                 java -version
                             '''
-                        }
-                    }
-                }
-                stage('Setup Git') {
-                    steps {
-                        container('node') {
-                            sh 'apk add --no-cache git'
                         }
                     }
                 }
