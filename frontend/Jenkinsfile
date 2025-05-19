@@ -21,6 +21,13 @@ spec:
     volumeMounts:
     - name: docker-config
       mountPath: /kaniko/.docker
+    resources:
+      requests:
+        cpu: "300m"
+        memory: "512Mi"
+      limits:
+        cpu: "600m"
+        memory: "1024Mi"
   - name: trivy 
     image: aquasec/trivy:latest 
     command: 
@@ -29,11 +36,11 @@ spec:
     - 9999999
     resources:
         requests:
-        cpu: "800m"
-        memory: "1100Mi"
+        cpu: "400m"
+        memory: "800Mi"
     limits:
-        cpu: "1000m"
-        memory: "2048Mi"
+        cpu: "800m"
+        memory: "1200Mi"
   volumes:
   - name: docker-config
     projected:
