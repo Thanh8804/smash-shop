@@ -143,8 +143,10 @@ spec:
                                 sh '''
                                     CRITICAL_COUNT=$(grep -oP 'CRITICAL: \\K[0-9]+' trivy-source.txt | head -1)
                                     if [ "$CRITICAL_COUNT" != "" ] && [ "$CRITICAL_COUNT" -gt 0 ]; then
-                                        echo "Critical vulnerabilities found in source scan ($CRITICAL_COUNT), failing pipeline"
+                                        echo "❌ Critical vulnerabilities found in source scan ($CRITICAL_COUNT), failing pipeline"
                                         exit 1
+                                    else
+                                        echo "✅ No critical vulnerabilities found."
                                     fi
                                 '''
                             }
@@ -179,13 +181,14 @@ spec:
                 }
             }
         }
-        stage('Trivy'){
+        stage('Trivy Image Scan') {
             steps {
               container('trivy'){
                   dir('frontend'){
                       script { // Thêm script block nếu muốn dùng biến Groovy
                         sh '''
                             trivy image --no-progress --severity MEDIUM,HIGH,CRITICAL \
+                                        --scanners vuln,secret \
                                         --skip-files ".npm/_cacache" \
                                         --timeout 10m thanh8804/smash-shop-frontend-image:$IMAGE_TAG > trivy-image.txt
                             cat trivy-image.txt
@@ -193,8 +196,10 @@ spec:
                         sh '''
                             CRITICAL_COUNT=$(grep -oP 'CRITICAL: \\K[0-9]+' trivy-image.txt | head -1)
                             if [ "$CRITICAL_COUNT" != "" ] && [ "$CRITICAL_COUNT" -gt 0 ]; then
-                                echo "Critical vulnerabilities found in source scan ($CRITICAL_COUNT), failing pipeline"
+                                echo "❌ Critical vulnerabilities found in source scan ($CRITICAL_COUNT), failing pipeline"
                                 exit 1
+                            else
+                                echo "✅ No critical vulnerabilities found."
                             fi
                         '''
                         }
