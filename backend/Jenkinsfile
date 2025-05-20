@@ -108,7 +108,7 @@ spec:
                     steps {
                         container('node') {
                             dir('backend') {
-                                sh 'npm test' // Allow tests to fail without stopping pipeline
+                                sh 'npm run test' // Allow tests to fail without stopping pipeline
                             }
                         }
                     }
