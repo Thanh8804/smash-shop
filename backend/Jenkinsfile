@@ -67,18 +67,19 @@ spec:
                 }
             }
         }
-        // stage('Install jdk') {
-        //     steps {
-        //         container('node') {
-        //             sh '''
-        //                 apk add --no-cache openjdk17
-        //                 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-        //                 export PATH=$JAVA_HOME/bin:$PATH
-        //                 java -version
-        //             '''
-        //         }
-        //     }
-        // }
+        // this stage is used to install JDK 17 for sonar-scanner
+        stage('Install jdk') {
+            steps {
+                container('node') {
+                    sh '''
+                        apk add --no-cache openjdk17
+                        export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+                        export PATH=$JAVA_HOME/bin:$PATH
+                        java -version
+                    '''
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 container('node') {
@@ -107,7 +108,7 @@ spec:
                     steps {
                         container('node') {
                             dir('backend') {
-                                sh 'npm test -- --coverage || true' // Allow tests to fail without stopping pipeline
+                                sh 'npm test' // Allow tests to fail without stopping pipeline
                             }
                         }
                     }
