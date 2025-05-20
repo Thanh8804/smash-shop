@@ -99,7 +99,7 @@ spec:
                     steps {
                         container('node') {
                             dir('backend') {
-                                sh 'npm ci'
+                                sh 'npm install'
                             }
                         }
                     }
