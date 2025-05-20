@@ -67,7 +67,7 @@ spec:
                 }
             }
         }
-        // this stage is used to install JDK 17 for sonar-scanner
+        // this stage is used to install JDK 17 for sonar scan and build the project
         stage('Install jdk') {
             steps {
                 container('node') {
@@ -99,7 +99,7 @@ spec:
                     steps {
                         container('node') {
                             dir('backend') {
-                                sh 'npm install'
+                                sh 'npm ci'
                             }
                         }
                     }
@@ -108,7 +108,7 @@ spec:
                     steps {
                         container('node') {
                             dir('backend') {
-                                sh 'npm run test' || true // Allow tests to fail without stopping pipeline
+                                sh 'npm test -- --coverage || true' // Allow tests to fail without stopping pipeline
                             }
                         }
                     }
