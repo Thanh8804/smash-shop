@@ -133,7 +133,7 @@ spec:
                 stage('Trivy Source Scan') {
                     steps {
                         container('trivy') {
-                            dir('backend') {
+                            dir('frontend') {
                                 sh '''
                                     trivy fs --no-progress --severity MEDIUM,HIGH,CRITICAL \
                                     --scanners vuln,secret \
